@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel Informativo</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-12">
+
+  <!-- Header / Navbar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 bg-indigo-600/20 text-indigo-400 rounded-xl border border-indigo-500/30">
+          <i class="fa-solid fa-folder-open text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-white">Painel do Sistema</h1>
+          <p class="text-xs text-slate-400">Espaço para informações e anotações</p>
+        </div>
+      </div>
+      
+      <!-- Navegação por Abas -->
+      <div class="flex items-center gap-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700">
+        <button onclick="switchTab('aba1')" id="tab-aba1" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+          <i class="fa-solid fa-layer-group"></i> Estatuto
+        </button>
+        <button onclick="switchTab('aba2')" id="tab-aba2" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-all flex items-center gap-2">
+          <i class="fa-solid fa-file-lines"></i> Tarefas
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 mt-8">
+
+    <!-- ABA 1 -->
+    <section id="sec-aba1" class="glass-card p-6 rounded-2xl space-y-4">
+      <h2 class="text-lg font-bold text-white flex items-center gap-2">
+        <i class="fa-solid fa-layer-group text-indigo-400"></i> Política de Convivência Residencial
+      </h2>
+      <p class="text-xs text-slate-400">Ler com Atenção.</p>
+      
+      <!-- Espaço limpo para o seu conteúdo -->
+      <div class="p-8 border-2 border-dashed border-slate-800 rounded-xl text-center text-slate-500 text-sm">
+        <p class="text-base sm:text-lg font-black text-amber-400 border-b border-slate-800 pb-3 mb-4 uppercase tracking-wider text-center">
+  ESTATUTO DE CONVIVÊNCIA FAMILIAR E GESTÃO DOMÉSTICA
+</p>
+
+<p class="text-xs font-bold text-slate-300 uppercase tracking-widest mt-6 mb-2 border-l-2 border-indigo-500 pl-2">
+  PREÂMBULO
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-4">
+  Este documento estabelece as diretrizes, deveres, direitos, penalidades e recompensas que regem a convivência, a sustentabilidade financeira e a organização das tarefas domésticas da residência. Sua aceitação e cumprimento são obrigatórios para todos os moradores da casa, garantindo a justiça, a ordem e o respeito mútuo.
+</p>
+
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-2 border-l-2 border-sky-400 pl-2">
+  TÍTULO I – DAS DISPOSIÇÕES GERAIS E DIREITOS FUNDAMENTAIS
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 1º</strong> A residência constitui um espaço comum mantido pelo esforço coletivo de seus moradores, sendo a colaboração financeira e operacional um dever de todos.
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 2º</strong> São direitos assegurados a todos os moradores em dia com suas obrigações:
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 1º</strong> Acesso integral às áreas comuns da residência.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 2º</strong> Uso dos serviços de conveniência mantidos pela casa (internet Wi-Fi, serviços de streaming, eletrodomésticos de conforto).
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 3º</strong> Participação nas refeições coletivas preparadas pela família.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-4">
+  <strong class="text-indigo-300">§ 4º</strong> Voto e voz em reuniões de alinhamento e tomadas de decisão sobre a casa.
+</p>
+
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-2 border-l-2 border-sky-400 pl-2">
+  TÍTULO II – DAS FINANÇAS E CONTRIBUIÇÕES
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 3º</strong> Todas as despesas fixas e variáveis necessárias ao funcionamento da residência serão consolidadas mensalmente no orçamento comum.
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 4º</strong> O pagamento da cota financeira da casa por cada morador deverá ser efetuado impreterivelmente até o dia fixado para o vencimento (ou repassado ao responsável pela liquidação das contas com até 2 (dois) dias de antecedência).
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 1º</strong> O valor das contribuições será definido mediante acordo prévio (seja por divisão igualitária ou proporcional à renda de cada morador).
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 2º</strong> Entendem-se por despesas essenciais comuns: aluguel/condomínio, IPTU, água, luz, gás, internet e feira/supermercado básico.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-4">
+  <strong class="text-indigo-300">§ 3º</strong> A impossibilidade temporária de pagamento por motivo de força maior (como desemprego) deverá ser comunicada formalmente com antecedência de no mínimo 5 (cinco) dias antes do vencimento, ficando o morador sujeito à compensação obrigatoriamente através de tarefas domésticas adicionais.
+</p>
+
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-2 border-l-2 border-sky-400 pl-2">
+  TÍTULO III – DAS OBRIGAÇÕES E TAREFAS DOMÉSTICAS
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 5º</strong> Os trabalhos de manutenção, limpeza e organização da residência serão distribuídos de forma equitativa entre todos os moradores capazes.
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 6º</strong> São regras de conduta diária e imediata:
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 1º Louça e Cozinha:</strong> É vedado deixar louça suja na pia ao final do dia. O morador que utilizar utensílios para preparar refeições individuais é responsável pela lavagem imediata dos mesmos.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 2º Áreas Comuns:</strong> Objetos pessoais deixados na sala, copa, corredores ou áreas externas deverão ser recolhidos e guardados em seus respectivos quartos ao término do dia.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 3º Resíduos:</strong> O morador que identificar que a lixeira comum atingiu sua capacidade máxima fica incumbido de retirar o saco de lixo e depositá-lo no local apropriado.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-4">
+  <strong class="text-indigo-300">§ 4º Lavanderia:</strong> Cada morador é responsável pelo recolhimento e organização de suas próprias roupas sujas e limpas.
+</p>
+
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-2 border-l-2 border-sky-400 pl-2">
+  TÍTULO IV – DAS BONIFICAÇÕES E INCENTIVOS
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 7º</strong> O cumprimento exemplar das obrigações e a prestação de auxílio voluntário ensejarão bonificações e concessão de regalias.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-amber-400">§ 1º Pontuação Mensal:</strong> O morador que quitar sua cota financeira até a data estipulada e cumprir 100% da sua escala de tarefas acumulará pontos conversíveis em privilégios.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-amber-400">§ 2º Direito de Escolha:</strong> O morador com maior pontuação acumulada na semana/mês terá o direito de escolher o cardápio das refeições de final de semana, filmes/séries em áreas comuns ou folga em rodízios de limpeza pesada.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-4">
+  <strong class="text-amber-400">§ 3º Crédito de Tarefa:</strong> A execução voluntária de tarefas pesadas extraordinárias dá ao morador o direito de abater uma tarefa ordinária da semana seguinte.
+</p>
+
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-2 border-l-2 border-sky-400 pl-2">
+  TÍTULO V – DAS INFRAÇÕES, PENALIDADES E CORTE DE PRIVILÉGIOS
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-4">
+  <strong class="text-white">Art. 8º</strong> O descumprimento das obrigações financeiras ou operacionais sujeitará o infrator às penalidades previstas neste Estatuto, aplicadas de forma progressiva.
+</p>
+
+<p class="text-xs font-bold text-rose-400 uppercase tracking-wider mt-4 mb-2 pl-2">
+  SEÇÃO I – DAS INFRAÇÕES FINANCEIRAS
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 9º</strong> O atraso injustificado no pagamento da cota financeira comum acarretará:
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-rose-400">§ 1º Multa Administrativa:</strong> Incidência de taxa de R$ 10,00 (dez reais) por dia de atraso, revertida diretamente para o fundo de reservas ou entretenimento da casa.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-rose-400">§ 2º Bloqueio do Wi-Fi:</strong> Troca imediata da senha de acesso à internet da casa, com fornecimento do novo código condicionado à quitação do débito.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-4">
+  <strong class="text-rose-400">§ 3º Corte de Supérfluos:</strong> Supressão do acesso a itens de conveniência (bebidas, guloseimas, marcas específicas) adquiridos com o dinheiro comum, mantendo-se apenas o acesso aos alimentos essenciais (arroz, feijão e itens básicos).
+</p>
+
+<p class="text-xs font-bold text-rose-400 uppercase tracking-wider mt-4 mb-2 pl-2">
+  SEÇÃO II – DAS INFRAÇÕES DOMÉSTICAS E REPETITIVAS
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 10.</strong> O descumprimento injustificado das tarefas domésticas acarretará:
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-rose-400">§ 1º Recusa de Serviços Domésticos:</strong> Fica expressamente proibido a qualquer morador lavar roupas, recolher bagunças ou preparar refeições individuais para o morador inadimplente com suas tarefas.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-rose-400">§ 2º Aumento da Carga de Trabalho:</strong> O descumprimento de tarefa leve (ex: não colocar o lixo fora ou deixar louça acumulada) implicará na transferência compulsória de uma tarefa de limpeza pesada para a semana seguinte.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-4">
+  <strong class="text-rose-400">§ 3º Isolamento de Pertences:</strong> Pertences ou louças deixados sujos em áreas comuns serão recolhidos e colocados diretamente na área privativa (quarto) do morador infrator.
+</p>
+
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-2 border-l-2 border-sky-400 pl-2">
+  TÍTULO VI – DA REINCIDÊNCIA E DA MEDIDA EXTREMA
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 11.</strong> É considerada reincidência a prática de 3 (três) infrações no período de 30 (trinta) dias.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-rose-400">§ 1º</strong> Em caso de reincidência continuada na falta de contribuição financeira e de recusa aos trabalhos domésticos, será realizada Reunião Extraordinária da Família.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-4">
+  <strong class="text-rose-400">§ 2º</strong> Persistindo o comportamento e configurando-se a recusa voluntária em colaborar, o morador será notificado para que, no prazo improrrogável de 30 (trinta) a 60 (sessenta) dias, organize sua transição e busque moradia própria fora do imóvel da família.
+</p>
+
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-2 border-l-2 border-sky-400 pl-2">
+  TÍTULO VII – DA CONTRIBUIÇÃO E USO DOS RECURSOS
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 12.</strong> Quem contribuir com os maiores valores mensais terá direito a mais benefícios e vantagens.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 1º</strong> O valor doado ou transferido só será registrado no controle financeiro após a confirmação do pagamento ou transferência.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-1">
+  <strong class="text-indigo-300">§ 2º</strong> É proibido usar o dinheiro do fundo comum para despesas ou interesses pessoais (seja para si mesmo ou para terceiros), incluindo empréstimos ou compras individuais, mesmo que haja promessa de devolução posterior.
+</p>
+<p class="text-xs text-slate-400 leading-relaxed pl-4 mb-4">
+  <strong class="text-indigo-300">§ 3º</strong> O dinheiro do fundo deve ser usado exclusivamente em benefício de todos os moradores (incluindo os animais de estimação) e em situações de urgência ou emergência, principalmente relacionadas à saúde.
+</p>
+
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-2 border-l-2 border-sky-400 pl-2">
+  TÍTULO VIII – DISPOSIÇÕES FINAIS
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-2">
+  <strong class="text-white">Art. 13.</strong> Este Estatuto entra em vigor na data de sua leitura e aprovação em reunião familiar, aplicando-se integralmente a todos os membros residentes.
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-4">
+  <strong class="text-white">Art. 14.</strong> Alterações neste documento somente poderão ser realizadas mediante consenso de ao menos dois terços (2/3) dos moradores contribuintes.
+</p>
+
+Osasco - SP, 01/11/2026 - De Acordo.
+      </div>
+    </section>
+
+    <!-- Estatuto 2 -->
+    <section id="sec-aba2" class="hidden glass-card p-6 rounded-2xl space-y-4">
+      <h2 class="text-lg font-bold text-white flex items-center gap-2">
+        <i class="fa-solid fa-file-lines text-indigo-400"></i> Tarefas Residenciais
+      </h2>
+      <p class="text-xs text-slate-400">Ler com Atenção.</p>
+
+      <!-- Espaço limpo para o seu conteúdo -->
+      <div class="p-8 border-2 border-dashed border-slate-800 rounded-xl text-center text-slate-500 text-sm">
+        <p class="text-base sm:text-lg font-black text-amber-400 border-b border-slate-800 pb-3 mb-4 uppercase tracking-wider text-center">
+  ESCALA DE TAREFAS DOMÉSTICAS E ROTINA
+</p>
+
+<!-- SEÇÃO 1: TAREFAS INDIVIDUAIS -->
+<p class="text-xs font-extrabold text-emerald-400 uppercase tracking-widest mt-6 mb-2 border-l-2 border-emerald-400 pl-2">
+  🟢 1. TAREFAS INDIVIDUAIS (OBRIGAÇÃO PESSOAL)
+</p>
+<p class="text-xs text-slate-300 leading-relaxed mb-4">
+  <strong class="text-white">Recolher e guardar as próprias roupas:</strong> Todos realizam para si mesmos diariamente.
+</p>
+
+<!-- SEÇÃO 2: DISTRIBUIÇÃO DIÁRIA -->
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-3 border-l-2 border-sky-400 pl-2">
+  📅 2. DISTRIBUIÇÃO DIÁRIA POR ROTINA
+</p>
+
+<!-- GUSTAVO -->
+<div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 mb-3 space-y-2">
+  <p class="text-xs font-bold text-indigo-400 flex items-center gap-1.5">
+    <i class="fa-solid fa-user"></i> Gustavo
+  </p>
+  <p class="text-xs text-slate-400">
+    <strong class="text-slate-300">Rotina:</strong> Seg a Sex (08h às 16h30) + 2h de estudo. Fins de semana livres e finais de tarde/noites estruturados.
+  </p>
+  <p class="text-xs font-semibold text-slate-300 mt-2">Tarefas Diárias:</p>
+  <p class="text-xs text-slate-400 pl-3">
+    • <strong class="text-slate-200">Retirar o lixo da casa</strong> (no final da tarde/noite, ao sair de um bloco de estudo ou antes de descansar).
+  </p>
+  <p class="text-xs text-slate-400 pl-3">
+    • <strong class="text-slate-200">Limpar a mesa das refeições</strong> (especialmente do jantar).
+  </p>
+</div>
+
+<!-- JUNIOR -->
+<div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 mb-3 space-y-2">
+  <p class="text-xs font-bold text-indigo-400 flex items-center gap-1.5">
+    <i class="fa-solid fa-user"></i> Junior
+  </p>
+  <p class="text-xs text-slate-400">
+    <strong class="text-slate-300">Rotina:</strong> Seg, Ter e Sex (07h às 19h - jornadas longas de 12h). Quarta, Quinta e Fins de Semana totalmente livres.
+  </p>
+  <p class="text-xs font-semibold text-slate-300 mt-2">Tarefas Diárias:</p>
+  <p class="text-xs text-slate-400 pl-3">
+    • <strong class="text-slate-200">Varrer o chão da casa</strong> nos dias folgados (Quarta, Quinta e Fim de Semana).
+  </p>
+  <p class="text-xs text-slate-400 pl-3">
+    • <strong class="text-slate-200">Lavar a louça do almoço/tarde</strong> nos dias folgados.
+  </p>
+  <p class="text-xs text-amber-400/90 italic pl-3 mt-1">
+    * Observação: Nos dias de plantão (Seg, Ter e Sex), fica isento de tarefas pesadas.
+  </p>
+</div>
+
+<!-- MAXINE -->
+<div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 mb-3 space-y-2">
+  <p class="text-xs font-bold text-indigo-400 flex items-center gap-1.5">
+    <i class="fa-solid fa-user"></i> Maxine
+  </p>
+  <p class="text-xs text-slate-400">
+    <strong class="text-slate-300">Rotina:</strong> Seg a Sex (14h às 22h) + 1 Sábado no mês. Manhãs totalmente livres.
+  </p>
+  <p class="text-xs font-semibold text-slate-300 mt-2">Tarefas Diárias:</p>
+  <p class="text-xs text-slate-400 pl-3">
+    • <strong class="text-slate-200">Trocar a água e colocar comida para os pets</strong> (pela manhã, antes de sair para o trabalho).
+  </p>
+  <p class="text-xs text-slate-400 pl-3">
+    • <strong class="text-slate-200">Encher as garrafas de água da geladeira</strong> (pela manhã ou ao chegar do trabalho).
+  </p>
+  <p class="text-xs text-slate-400 pl-3">
+    • <strong class="text-slate-200">Lavar a louça do café da manhã</strong> antes de ir trabalhar.
+  </p>
+</div>
+
+<!-- GLAUBER -->
+<div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 mb-4 space-y-2">
+  <p class="text-xs font-bold text-indigo-400 flex items-center gap-1.5">
+    <i class="fa-solid fa-user-gear"></i> Glauber
+  </p>
+  <p class="text-xs text-slate-400">
+    <strong class="text-slate-300">Rotina:</strong> Imprevisível (dias fora em obras vs. dias direto em casa).
+  </p>
+  <p class="text-xs font-semibold text-slate-300 mt-2">Tarefas Focadas (Quando estiver em casa):</p>
+  <p class="text-xs text-slate-400 pl-3">
+    • <strong class="text-slate-200">Lavar a louça do jantar</strong> nos dias em que estiver presente.
+  </p>
+  <p class="text-xs text-slate-400 pl-3">
+    • <strong class="text-slate-200">Varrer o chão</strong> nos dias em que estiver de folga durante a semana (ajudando nos dias em que o Junior trabalha).
+  </p>
+  <p class="text-xs text-rose-400/90 italic pl-3 mt-1">
+    * Regra de Ausência: Quando o Glauber estiver viajando a trabalho, a louça do jantar e os cuidados extras são divididos temporariamente entre Gustavo e Maxine.
+  </p>
+</div>
+
+<!-- RESUMO DA ESCALA -->
+<p class="text-xs font-extrabold text-sky-400 uppercase tracking-widest mt-6 mb-3 border-l-2 border-sky-400 pl-2">
+  📋 RESUMO DA ESCALA DE CUIDADOS DIÁRIOS
+</p>
+
+<div class="overflow-x-auto rounded-xl border border-slate-800 mb-4">
+  <table class="w-full text-left border-collapse">
+    <thead>
+      <tr class="bg-slate-900 text-amber-400 text-[11px] font-bold uppercase tracking-wider border-b border-slate-800">
+        <th class="p-3">Horário / Turno</th>
+        <th class="p-3">Responsável Principal</th>
+        <th class="p-3">Tarefas Atribuídas</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-800 text-xs text-slate-300">
+      <tr class="hover:bg-slate-900/50">
+        <td class="p-3 font-semibold text-indigo-300">Manhã</td>
+        <td class="p-3 font-bold text-white">Maxine</td>
+        <td class="p-3 text-slate-400">Alimentar e trocar água dos pets, encher garrafas e louça do café.</td>
+      </tr>
+      <tr class="hover:bg-slate-900/50">
+        <td class="p-3 font-semibold text-indigo-300">Tarde (Folgas)</td>
+        <td class="p-3 font-bold text-white">Junior</td>
+        <td class="p-3 text-slate-400">Varrer o chão e organizar a louça (Quarta, Quinta, Sáb e Dom).</td>
+      </tr>
+      <tr class="hover:bg-slate-900/50">
+        <td class="p-3 font-semibold text-indigo-300">Fim da Tarde / Noite</td>
+        <td class="p-3 font-bold text-white">Gustavo</td>
+        <td class="p-3 text-slate-400">Retirar todos os lixos da casa e limpar a mesa após as refeições.</td>
+      </tr>
+      <tr class="hover:bg-slate-900/50">
+        <td class="p-3 font-semibold text-indigo-300">Noite / Presencial</td>
+        <td class="p-3 font-bold text-white">Glauber</td>
+        <td class="p-3 text-slate-400">Louça do jantar e varrer o chão (quando estiver em casa).</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Script de Troca de Abas -->
+  <script>
+    function switchTab(tab) {
+      ['aba1', 'aba2'].forEach(t => {
+        document.getElementById(`sec-${t}`).classList.add('hidden');
+        document.getElementById(`tab-${t}`).className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-all flex items-center gap-2";
+      });
+
+      document.getElementById(`sec-${tab}`).classList.remove('hidden');
+      document.getElementById(`tab-${tab}`).className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 flex items-center gap-2";
+    }
+  </script>
+</body>
+</html>

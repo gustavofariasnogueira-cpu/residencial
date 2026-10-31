@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestão Residencial & Financeira</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .badge-glow {
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.35);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-12">
+
+  <!-- Header / Navbar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 bg-indigo-600/20 text-indigo-400 rounded-xl border border-indigo-500/30">
+          <i class="fa-solid fa-wallet text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-white">Gestão Residencial & Financeira</h1>
+          <p class="text-xs text-slate-400">Controle de Contribuições, Gastos Coletivos e Balanço da Casa</p>
+        </div>
+      </div>
+      
+      <!-- Navegação Externa (Botões Separados) -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-md shadow-indigo-600/30 flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-pie"></i> Financeiro
+        </span>
+        <a href="tarefas.html" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-list-check text-indigo-400"></i> Tarefas
+        </a>
+        <a href="Estatuto e Tarefas.html" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-gavel text-amber-400"></i> Estatuto e Regras
+        </a>
+        <a href="pendencias.html" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-clock-history text-rose-400"></i> Pendências
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 mt-8 space-y-8">
+
+    <!-- Destaque do Maior Contribuidor Financeiro -->
+    <div id="banner-destaque" class="glass-card p-6 rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-slate-900 to-indigo-500/10 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden">
+      <!-- Inserido via JS -->
+    </div>
+
+    <!-- KPIs Financeiros -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="glass-card p-5 rounded-2xl">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Arrecadado</span>
+          <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+        </div>
+        <div class="text-2xl font-bold text-emerald-400 mt-2" id="kpi-colaborado">R$ 0,00</div>
+        <p class="text-xs text-slate-500 mt-1">Soma das contribuições do mês</p>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Despesas da Casa</span>
+          <div class="p-2 bg-rose-500/10 text-rose-400 rounded-lg"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+        </div>
+        <div class="text-2xl font-bold text-rose-400 mt-2" id="kpi-despesas">R$ 0,00</div>
+        <p class="text-xs text-slate-500 mt-1">Total de contas cadastradas</p>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider" id="kpi-saldo-label">Saldo / Sobra</span>
+          <div class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg" id="kpi-saldo-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+        </div>
+        <div class="text-2xl font-bold text-indigo-400 mt-2" id="kpi-saldo">R$ 0,00</div>
+        <p class="text-xs text-slate-500 mt-1" id="kpi-saldo-sub">Diferença entre arrecadado e gastos</p>
+      </div>
+
+      <!-- Caixinha / Reserva Editável -->
+      <div class="glass-card p-5 rounded-2xl">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Caixinha / Reserva</span>
+          <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg"><i class="fa-solid fa-vault"></i></div>
+        </div>
+        <div class="flex items-center gap-1 text-2xl font-bold text-amber-400 mt-2">
+          <span>R$</span>
+          <input type="number" id="input-caixinha-reserva" step="5" value="0" onchange="atualizarReservaManual(parseFloat(this.value) || 0)" class="bg-transparent text-amber-400 font-bold text-2xl w-full outline-none border-b border-transparent focus:border-amber-500"/>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">Fundo de emergência retido (editável)</p>
+      </div>
+    </div>
+
+    <!-- Gestão de Contribuições e Despesas -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Coluna Esquerda: Colaboração Financeira dos Moradores -->
+      <div class="glass-card p-6 rounded-2xl space-y-6 lg:col-span-2">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-users text-indigo-400"></i> Contribuição Financeira & Pontuação
+            </h2>
+            <p class="text-xs text-slate-400">Valores depositados e pontos acumulados nas tarefas</p>
+          </div>
+          <button onclick="adicionarMorador()" class="text-xs bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 border border-indigo-500/30 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 self-start sm:self-auto">
+            <i class="fa-solid fa-user-plus"></i> + Add Morador
+          </button>
+        </div>
+
+        <div class="space-y-4" id="lista-moradores">
+          <!-- Inserido via JS -->
+        </div>
+      </div>
+
+      <!-- Coluna Direita: Contas e Despesas da Casa -->
+      <div class="glass-card p-6 rounded-2xl space-y-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-rose-400"></i> Despesas do Mês
+            </h2>
+            <p class="text-xs text-slate-400">Contas fixas e compras coletivas</p>
+          </div>
+          <button onclick="adicionarConta()" class="text-xs bg-rose-600/30 hover:bg-rose-600/50 text-rose-300 border border-rose-500/30 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1">
+            <i class="fa-solid fa-plus"></i> + Nova Conta
+          </button>
+        </div>
+
+        <div class="space-y-3 max-h-[500px] overflow-y-auto pr-1" id="lista-contas">
+          <!-- Inserido via JS -->
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Script da Aplicação -->
+  <script>
+    // Estado Inicial / Carregamento via localStorage
+    let moradores = JSON.parse(localStorage.getItem('residencia_moradores')) || [
+      { id: 1, nome: "Gustavo", colaboracao: 2200, pontos: 0 },
+      { id: 2, nome: "Maxine", colaboracao: 1500, pontos: 0 },
+      { id: 3, nome: "Socorro", colaboracao: 800, pontos: 0 },
+      { id: 4, nome: "Marcos", colaboracao: 2200, pontos: 0 },
+      { id: 5, nome: "Junior", colaboracao: 1500, pontos: 0 },
+      { id: 6, nome: "Glauber", colaboracao: 800, pontos: 0 }
+    ];
+
+    let contas = JSON.parse(localStorage.getItem('residencia_contas')) || [
+      { id: 1, nome: "Aluguel / Condomínio", valor: 2100, categoria: "Moradia" },
+      { id: 2, nome: "Luz, Água & Gás", valor: 420, categoria: "Essencial" },
+      { id: 3, nome: "Internet & TV", valor: 160, categoria: "Serviços" },
+      { id: 4, nome: "Supermercado & Feira", valor: 1400, categoria: "Alimentação" }
+    ];
+
+    let caixinhaReserva = parseFloat(localStorage.getItem('residencia_caixinha')) || 450.00;
+
+    function salvarDados() {
+      localStorage.setItem('residencia_moradores', JSON.stringify(moradores));
+      localStorage.setItem('residencia_contas', JSON.stringify(contas));
+      localStorage.setItem('residencia_caixinha', caixinhaReserva);
+    }
+
+    function atualizarReservaManual(valor) {
+      caixinhaReserva = valor;
+      salvarDados();
+    }
+
+    // Renderizar Banner de Destaque Financeiro
+    function renderBannerDestaque() {
+      const banner = document.getElementById('banner-destaque');
+      
+      if (moradores.length === 0) {
+        banner.innerHTML = `<p class="text-slate-400 text-sm">Nenhum morador cadastrado.</p>`;
+        return;
+      }
+
+      const totalArrecadado = moradores.reduce((acc, m) => acc + m.colaboracao, 0);
+
+      let maiorDestaque = null;
+      let maiorValor = -1;
+
+      moradores.forEach(m => {
+        if (m.colaboracao > maiorValor) {
+          maiorValor = m.colaboracao;
+          maiorDestaque = m;
+        }
+      });
+
+      if (maiorDestaque && totalArrecadado > 0 && maiorValor > 0) {
+        const porc = ((maiorDestaque.colaboracao / totalArrecadado) * 100).toFixed(1);
+        banner.innerHTML = `
+          <div class="flex items-center gap-4 z-10">
+            <div class="relative">
+              <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border-2 border-amber-500/50 flex items-center justify-center font-extrabold text-2xl badge-glow">
+                <i class="fa-solid fa-crown text-amber-400"></i>
+              </div>
+              <span class="absolute -bottom-2 -right-2 bg-amber-500 text-slate-950 font-black text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">
+                #1 Finanças
+              </span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Maior Colaborador do Mês</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-medium">Líder do Fundo</span>
+              </div>
+              <h2 class="text-2xl font-black text-white mt-0.5">${maiorDestaque.nome}</h2>
+              <p class="text-xs text-slate-300 mt-1">
+                Contribuição individual de <strong class="text-emerald-400">R$ ${maiorDestaque.colaboracao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> (${porc}% do total) + <strong class="text-amber-400">${maiorDestaque.pontos || 0} pts em tarefas</strong>
+              </p>
+            </div>
+          </div>
+          <div class="z-10 bg-slate-900/80 border border-amber-500/30 p-3.5 rounded-xl text-xs space-y-1 max-w-sm">
+            <p class="font-bold text-amber-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-coins"></i> Resumo Orçamentário
+            </p>
+            <p class="text-slate-300">O morador garantiu a maior parcela do fundo comum neste ciclo financeiro.</p>
+          </div>
+        `;
+      } else {
+        banner.innerHTML = `<p class="text-slate-400 text-xs">Insira os valores das contribuições para identificar o principal colaborador financeiro do mês.</p>`;
+      }
+    }
+
+    // Renderizar Lista de Moradores
+    function renderMoradores() {
+      const container = document.getElementById('lista-moradores');
+      container.innerHTML = '';
+
+      const totalArrecadado = moradores.reduce((acc, m) => acc + m.colaboracao, 0);
+
+      moradores.forEach(m => {
+        const porc = totalArrecadado > 0 ? ((m.colaboracao / totalArrecadado) * 100).toFixed(1) : 0;
+        const pontosMorador = m.pontos || 0;
+
+        container.innerHTML += `
+          <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-base">
+                  ${m.nome.substring(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <input type="text" value="${m.nome}" onchange="atualizarMorador(${m.id}, 'nome', this.value)" class="bg-transparent text-white font-bold text-sm outline-none border-b border-transparent focus:border-indigo-500 w-32"/>
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold flex items-center gap-1">
+                      <i class="fa-solid fa-star text-[10px]"></i> ${pontosMorador} pts
+                    </span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 block mt-0.5">Morador Ativo</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="text-right">
+                  <label class="text-[10px] text-slate-400 font-semibold uppercase block">Valor Contribuído</label>
+                  <div class="flex items-center gap-1 text-sm font-extrabold text-emerald-400">
+                    <span>R$</span>
+                    <input type="number" step="10" value="${m.colaboracao}" onchange="atualizarMorador(${m.id}, 'colaboracao', parseFloat(this.value) || 0)" class="bg-transparent text-emerald-400 font-extrabold w-28 text-right outline-none border-b border-transparent focus:border-emerald-500"/>
+                  </div>
+                </div>
+                <button onclick="removerMorador(${m.id})" class="text-slate-500 hover:text-rose-400 p-2 text-xs transition-all" title="Remover Morador">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px] font-medium text-slate-400">
+                <span>Participação na arrecadação total</span>
+                <span class="text-indigo-300 font-bold">${porc}%</span>
+              </div>
+              <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-500" style="width: ${porc}%"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function atualizarMorador(id, campo, valor) {
+      const m = moradores.find(x => x.id === id);
+      if (m) {
+        m[campo] = valor;
+        calcularTudo();
+      }
+    }
+
+    function adicionarMorador() {
+      const novoId = moradores.length ? Math.max(...moradores.map(m => m.id)) + 1 : 1;
+      moradores.push({ id: novoId, nome: `Morador ${novoId}`, colaboracao: 1000, pontos: 0 });
+      calcularTudo();
+    }
+
+    function removerMorador(id) {
+      moradores = moradores.filter(m => m.id !== id);
+      calcularTudo();
+    }
+
+    // Renderizar Despesas e Contas
+    function renderContas() {
+      const container = document.getElementById('lista-contas');
+      container.innerHTML = '';
+
+      contas.forEach(c => {
+        container.innerHTML += `
+          <div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+            <div class="space-y-1">
+              <input type="text" value="${c.nome}" onchange="atualizarConta(${c.id}, 'nome', this.value)" class="bg-transparent text-white text-xs font-semibold outline-none border-b border-transparent focus:border-rose-500 w-36"/>
+              <select onchange="atualizarConta(${c.id}, 'categoria', this.value)" class="bg-slate-800 text-[10px] text-slate-300 px-2 py-0.5 rounded border border-slate-700 outline-none block">
+                <option value="Moradia" ${c.categoria === 'Moradia' ? 'selected' : ''}>Moradia</option>
+                <option value="Essencial" ${c.categoria === 'Essencial' ? 'selected' : ''}>Essencial</option>
+                <option value="Serviços" ${c.categoria === 'Serviços' ? 'selected' : ''}>Serviços</option>
+                <option value="Alimentação" ${c.categoria === 'Alimentação' ? 'selected' : ''}>Alimentação</option>
+                <option value="Geral" ${c.categoria === 'Geral' ? 'selected' : ''}>Geral</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-slate-400 font-semibold">R$</span>
+              <input type="number" step="5" value="${c.valor}" onchange="atualizarConta(${c.id}, 'valor', parseFloat(this.value) || 0)" class="bg-transparent text-rose-400 font-bold text-xs w-20 text-right outline-none border-b border-transparent focus:border-rose-500"/>
+              <button onclick="removerConta(${c.id})" class="text-slate-500 hover:text-rose-400 p-1 text-xs transition-all" title="Excluir Conta">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function atualizarConta(id, campo, valor) {
+      const c = contas.find(x => x.id === id);
+      if (c) {
+        c[campo] = valor;
+        calcularTudo();
+      }
+    }
+
+    function adicionarConta() {
+      const novoId = contas.length ? Math.max(...contas.map(c => c.id)) + 1 : 1;
+      contas.push({ id: novoId, nome: "Nova Despesa", valor: 150, categoria: "Geral" });
+      calcularTudo();
+    }
+
+    function removerConta(id) {
+      contas = contas.filter(c => c.id !== id);
+      calcularTudo();
+    }
+
+    // Cálculo Global Financeiro
+    function calcularTudo() {
+      const totalColaborado = moradores.reduce((acc, m) => acc + m.colaboracao, 0);
+      const totalDespesas = contas.reduce((acc, c) => acc + c.valor, 0);
+      const saldo = totalColaborado - totalDespesas;
+
+      document.getElementById('kpi-colaborado').innerText = `R$ ${totalColaborado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+      document.getElementById('kpi-despesas').innerText = `R$ ${totalDespesas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+      
+      const elSaldo = document.getElementById('kpi-saldo');
+      const elSaldoLabel = document.getElementById('kpi-saldo-label');
+      const elSaldoSub = document.getElementById('kpi-saldo-sub');
+      const elSaldoIcon = document.getElementById('kpi-saldo-icon');
+
+      if (saldo >= 0) {
+        elSaldo.innerText = `R$ ${saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        elSaldo.className = "text-2xl font-bold text-emerald-400 mt-2";
+        elSaldoLabel.innerText = "Sobra / Superávit";
+        elSaldoSub.innerText = "Recursos livres para o fundo";
+        elSaldoIcon.className = "p-2 bg-emerald-500/10 text-emerald-400 rounded-lg";
+      } else {
+        elSaldo.innerText = `R$ ${Math.abs(saldo).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        elSaldo.className = "text-2xl font-bold text-rose-500 mt-2";
+        elSaldoLabel.innerText = "Déficit / Falta";
+        elSaldoSub.innerText = "Falta arrecadar para cobrir as contas";
+        elSaldoIcon.className = "p-2 bg-rose-500/10 text-rose-400 rounded-lg";
+      }
+
+      const inputCaixinha = document.getElementById('input-caixinha-reserva');
+      if (document.activeElement !== inputCaixinha) {
+        inputCaixinha.value = caixinhaReserva;
+      }
+
+      renderMoradores();
+      renderContas();
+      renderBannerDestaque();
+      salvarDados();
+    }
+
+    // Inicialização da Página
+    window.onload = function() {
+      const savedMoradores = localStorage.getItem('residencia_moradores');
+      if (savedMoradores) {
+        moradores = JSON.parse(savedMoradores);
+      }
+      calcularTudo();
+    };
+  </script>
+</body>
+</html>

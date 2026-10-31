@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel de Pendências & Acompanhamento</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- SheetJS para Exportação em Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-12">
+
+  <!-- Header / Navbar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 bg-indigo-600/20 text-indigo-400 rounded-xl border border-indigo-500/30">
+          <i class="fa-solid fa-clock-history text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-white">Controle de Pendências & Tempo</h1>
+          <p class="text-xs text-slate-400">Monitoramento de prazos e exportação de relatórios</p>
+        </div>
+      </div>
+      
+      <!-- Navegação Externa -->
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="index.html" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-pie text-indigo-400"></i> Financeiro
+        </a>
+        <a href="tarefas.html" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-list-check text-indigo-400"></i> Tarefas
+        </a>
+        <a href="Estatuto e Tarefas.html" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-gavel text-amber-400"></i> Estatuto e Tarefas
+        </a>
+        <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-md shadow-indigo-600/30 flex items-center gap-1.5">
+          <i class="fa-solid fa-clock-history"></i> Pendências
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 mt-8 space-y-8">
+
+    <!-- Cards de Resumo KPI -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="glass-card p-5 rounded-2xl border-l-4 border-amber-500">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Pendentes</span>
+          <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg"><i class="fa-solid fa-hourglass-half"></i></div>
+        </div>
+        <div class="text-2xl font-bold text-amber-400 mt-2" id="kpi-total-pendentes">0</div>
+        <p class="text-xs text-slate-500 mt-1">Aguardando execução</p>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl border-l-4 border-sky-500">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Agendadas (Futuras)</span>
+          <div class="p-2 bg-sky-500/10 text-sky-400 rounded-lg"><i class="fa-solid fa-calendar-days"></i></div>
+        </div>
+        <div class="text-2xl font-bold text-sky-400 mt-2" id="kpi-total-futuras">0</div>
+        <p class="text-xs text-slate-500 mt-1">Datas para os próximos dias</p>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl border-l-4 border-emerald-500">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Concluídas este Mês</span>
+          <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg"><i class="fa-solid fa-circle-check"></i></div>
+        </div>
+        <div class="text-2xl font-bold text-emerald-400 mt-2" id="kpi-total-concluidas">0</div>
+        <p class="text-xs text-slate-500 mt-1">Finalizadas com sucesso</p>
+      </div>
+    </div>
+
+    <!-- Lista de Pendências -->
+    <div class="glass-card p-6 rounded-2xl space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-800">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-list-ol text-indigo-400"></i> Linha do Tempo & Acompanhamento
+          </h2>
+          <p class="text-xs text-slate-400">Acompanhe e exporte o status em tempo real de cada tarefa</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Botão Exportar Excel -->
+          <button onclick="exportarParaExcel()" class="px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-600/30 transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-file-excel text-sm"></i> Exportar Excel
+          </button>
+
+          <select id="filtro-morador" onchange="renderPendencias()" class="bg-slate-900 text-xs text-slate-300 border border-slate-700 rounded-xl px-3 py-2 outline-none">
+            <option value="todos">Todos os Responsáveis</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Grid de Tarefas com Tempo Decorrido -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="container-pendencias">
+        <!-- Inserido via JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let tarefas = JSON.parse(localStorage.getItem('residencia_tarefas')) || [];
+    let moradores = JSON.parse(localStorage.getItem('residencia_moradores')) || [];
+
+    function salvarTudo() {
+      localStorage.setItem('residencia_tarefas', JSON.stringify(tarefas));
+      localStorage.setItem('residencia_moradores', JSON.stringify(moradores));
+    }
+
+    function popularSelectMoradores() {
+      const select = document.getElementById('filtro-morador');
+      select.innerHTML = `<option value="todos">Todos os Responsáveis</option>`;
+      moradores.forEach(m => {
+        select.innerHTML += `<option value="${m.nome}">${m.nome}</option>`;
+      });
+    }
+
+    // Normaliza datas em formato BR ou timestamp
+    function normalizarTimestamp(val) {
+      if (!val) return Date.now();
+      if (typeof val === 'number') return val;
+      
+      const str = String(val).trim();
+      const regexBr = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{1,2}))?/;
+      const match = str.match(regexBr);
+      if (match) {
+        const dia = parseInt(match[1], 10);
+        const mes = parseInt(match[2], 10) - 1;
+        const ano = parseInt(match[3], 10);
+        const hora = match[4] ? parseInt(match[4], 10) : 8;
+        const min = match[5] ? parseInt(match[5], 10) : 0;
+        return new Date(ano, mes, dia, hora, min).getTime();
+      }
+
+      const parsed = Date.parse(str);
+      return isNaN(parsed) ? Date.now() : parsed;
+    }
+
+    // Calcula tempo decorrido ou tempo restante
+    function calcularTempoDecorrido(valData) {
+      const agora = Date.now();
+      const tsData = normalizarTimestamp(valData);
+      const diffMs = agora - tsData;
+
+      if (diffMs < 0) {
+        const absMs = Math.abs(diffMs);
+        const diffMin = Math.floor(absMs / 60000);
+        const diffHoras = Math.floor(diffMin / 60);
+        const diffDias = Math.floor(diffHoras / 24);
+        return {
+          ehFutura: true,
+          dias: diffDias,
+          horas: diffHoras % 24,
+          minutos: diffMin % 60,
+          timestamp: tsData
+        };
+      }
+
+      const diffMin = Math.floor(diffMs / 60000);
+      const diffHoras = Math.floor(diffMin / 60);
+      const diffDias = Math.floor(diffHoras / 24);
+
+      return {
+        ehFutura: false,
+        dias: diffDias,
+        horas: diffHoras % 24,
+        minutos: diffMin % 60,
+        timestamp: tsData
+      };
+    }
+
+    function toggleConclusao(id) {
+      const t = tarefas.find(x => x.id === id);
+      if (!t) return;
+
+      t.concluida = !t.concluida;
+
+      const m = moradores.find(x => x.nome.toLowerCase() === t.responsavel.toLowerCase());
+      if (m) {
+        if (t.concluida) {
+          m.pontos = (m.pontos || 0) + (t.pontos || 10);
+        } else {
+          m.pontos = Math.max(0, (m.pontos || 0) - (t.pontos || 10));
+        }
+      }
+
+      salvarTudo();
+      renderPendencias();
+    }
+
+    // Função de Exportação para Excel (.xlsx)
+    function exportarParaExcel() {
+      const filtroResp = document.getElementById('filtro-morador').value;
+      const pendentes = tarefas.filter(t => !t.concluida);
+      
+      let listaExportar = pendentes;
+      if (filtroResp !== 'todos') {
+        listaExportar = pendentes.filter(t => t.responsavel.toLowerCase() === filtroResp.toLowerCase());
+      }
+
+      if (listaExportar.length === 0) {
+        alert('Não há pendências para exportar!');
+        return;
+      }
+
+      const dadosPlanilha = listaExportar.map(t => {
+        const tempo = calcularTempoDecorrido(t.dataCriacao);
+        const tsTarget = normalizarTimestamp(t.dataCriacao);
+        const dataFormatada = new Date(tsTarget).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        return {
+          "Tarefa": t.nome,
+          "Responsável": t.responsavel,
+          "Pontos": t.pontos || 10,
+          "Data Programada": dataFormatada,
+          "Status": tempo.ehFutura ? "Agendada (Futura)" : "Atrasada / Em Andamento",
+          "Tempo Acumulado": `${tempo.dias}d ${tempo.horas}h ${tempo.minutos}m`
+        };
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(dadosPlanilha);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Pendências");
+
+      // Baixar arquivo com data atual no nome
+      const dataHoje = new Date().toISOString().split('T')[0];
+      XLSX.writeFile(workbook, `relatorio_pendencias_${dataHoje}.xlsx`);
+    }
+
+    function renderPendencias() {
+      const container = document.getElementById('container-pendencias');
+      const filtroResp = document.getElementById('filtro-morador').value;
+      container.innerHTML = '';
+
+      const pendentes = tarefas.filter(t => !t.concluida);
+      const concluidas = tarefas.filter(t => t.concluida);
+      
+      let futurasCount = 0;
+      pendentes.forEach(t => {
+        const tempo = calcularTempoDecorrido(t.dataCriacao);
+        if (tempo.ehFutura) futurasCount++;
+      });
+
+      document.getElementById('kpi-total-pendentes').innerText = pendentes.length;
+      document.getElementById('kpi-total-futuras').innerText = futurasCount;
+      document.getElementById('kpi-total-concluidas').innerText = concluidas.length;
+
+      let listaExibicao = pendentes;
+      if (filtroResp !== 'todos') {
+        listaExibicao = pendentes.filter(t => t.responsavel.toLowerCase() === filtroResp.toLowerCase());
+      }
+
+      if (listaExibicao.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 italic">
+            <i class="fa-solid fa-circle-check text-3xl mb-2 text-emerald-500/50 block"></i>
+            Nenhuma pendência encontrada para o filtro selecionado!
+          </div>
+        `;
+        return;
+      }
+
+      // Ordena por data cronológica
+      listaExibicao.sort((a, b) => normalizarTimestamp(a.dataCriacao) - normalizarTimestamp(b.dataCriacao));
+
+      listaExibicao.forEach(t => {
+        const tempo = calcularTempoDecorrido(t.dataCriacao);
+        const tsTarget = normalizarTimestamp(t.dataCriacao);
+        const dataFormatada = new Date(tsTarget).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        container.innerHTML += `
+          <div class="p-5 rounded-2xl border bg-slate-900/80 border-slate-800 hover:border-slate-700 transition-all">
+            <div class="flex justify-between items-start gap-3">
+              <div class="flex items-start gap-3">
+                <button onclick="toggleConclusao(${t.id})" class="mt-0.5 w-6 h-6 rounded-full border-2 border-slate-600 hover:border-emerald-400 text-transparent flex items-center justify-center transition-all" title="Concluir Tarefa">
+                  <i class="fa-solid fa-check text-xs"></i>
+                </button>
+                <div>
+                  <h3 class="text-sm font-bold text-white">${t.nome}</h3>
+                  <span class="text-xs text-indigo-300 font-semibold block mt-0.5">Responsável: ${t.responsavel}</span>
+                  <span class="text-[10px] text-slate-500 block mt-0.5"><i class="fa-regular fa-calendar-check mr-1"></i>Data Programada: ${dataFormatada}</span>
+                </div>
+              </div>
+
+              <span class="px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-bold">
+                +${t.pontos || 10} pts
+              </span>
+            </div>
+
+            <!-- Contador de Tempo Decorrido / Agendamento -->
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-medium">${tempo.ehFutura ? 'Agendada para daqui a:' : 'Tempo decorrido:'}</span>
+              <div class="font-bold flex items-center gap-2 ${tempo.ehFutura ? 'text-sky-400' : 'text-amber-400'}">
+                <i class="fa-regular fa-clock"></i>
+                <span>${tempo.dias}d ${tempo.horas}h ${tempo.minutos}m</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    window.onload = function() {
+      const savedTarefas = localStorage.getItem('residencia_tarefas');
+      if (savedTarefas) tarefas = JSON.parse(savedTarefas);
+      const savedMoradores = localStorage.getItem('residencia_moradores');
+      if (savedMoradores) moradores = JSON.parse(savedMoradores);
+
+      popularSelectMoradores();
+      renderPendencias();
+
+      setInterval(renderPendencias, 60000);
+    };
+  </script>
+</body>
+</html>
