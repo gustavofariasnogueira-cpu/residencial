@@ -165,8 +165,26 @@
 
   </main>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <script>
-    // Carregar Estado Compartilhado via localStorage
+    // Inicialização do Firebase com o seu projeto residencial-7210a
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4BatmwCnsz5VV9HSu2bWcEXhNOt2r4U4",
+      authDomain: "residencial-7210a.firebaseapp.com",
+      databaseURL: "https://residencial-7210a-default-rtdb.firebaseio.com",
+      projectId: "residencial-7210a",
+      storageBucket: "residencial-7210a.firebasestorage.app",
+      messagingSenderId: "922614456522",
+      appId: "1:922614456522:web:468308256d3dc266425433"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Carregar Estado Compartilhado via localStorage / Firebase
     let moradores = JSON.parse(localStorage.getItem('residencia_moradores')) || [
       { id: 1, nome: "Gustavo", colaboracao: 2200, pontos: 0 },
       { id: 2, nome: "Maxine", colaboracao: 1500, pontos: 0 },
@@ -189,14 +207,21 @@
     function salvarTudo() {
       localStorage.setItem('residencia_moradores', JSON.stringify(moradores));
       localStorage.setItem('residencia_tarefas', JSON.stringify(tarefas));
+
+      // Salva em tempo real no Firebase
+      db.ref('residencia/moradores').set(moradores);
+      db.ref('residencia/tarefas').set(tarefas);
     }
 
     function popularSelectMoradores() {
       const select = document.getElementById('nova-tarefa-resp');
+      if (!select) return;
+      const valAtual = select.value;
       select.innerHTML = '';
       moradores.forEach(m => {
         select.innerHTML += `<option value="${m.nome}">${m.nome}</option>`;
       });
+      if (valAtual) select.value = valAtual;
     }
 
     // Função para tratar parse de datas vindas do Excel/Formulário
@@ -474,14 +499,17 @@
       });
     }
 
+    // Escuta alterações em tempo real no Firebase ao carregar a página
     window.onload = function() {
-      const savedMoradores = localStorage.getItem('residencia_moradores');
-      if (savedMoradores) {
-        moradores = JSON.parse(savedMoradores);
-      }
-      popularSelectMoradores();
-      renderTarefas();
-      renderRanking();
+      db.ref('residencia').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        if (data.moradores) moradores = data.moradores;
+        if (data.tarefas) tarefas = data.tarefas;
+
+        popularSelectMoradores();
+        renderTarefas();
+        renderRanking();
+      });
     };
   </script>
 </body>
