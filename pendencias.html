@@ -115,21 +115,45 @@
 
   </main>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <script>
+    // Inicialização do Firebase com as credenciais do seu projeto
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4BatmwCnsz5VV9HSu2bWcEXhNOt2r4U4",
+      authDomain: "residencial-7210a.firebaseapp.com",
+      databaseURL: "https://residencial-7210a-default-rtdb.firebaseio.com",
+      projectId: "residencial-7210a",
+      storageBucket: "residencial-7210a.firebasestorage.app",
+      messagingSenderId: "922614456522",
+      appId: "1:922614456522:web:468308256d3dc266425433"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
     let tarefas = JSON.parse(localStorage.getItem('residencia_tarefas')) || [];
     let moradores = JSON.parse(localStorage.getItem('residencia_moradores')) || [];
 
     function salvarTudo() {
       localStorage.setItem('residencia_tarefas', JSON.stringify(tarefas));
       localStorage.setItem('residencia_moradores', JSON.stringify(moradores));
+
+      // Atualiza em tempo real no Firebase
+      db.ref('residencia/tarefas').set(tarefas);
+      db.ref('residencia/moradores').set(moradores);
     }
 
     function popularSelectMoradores() {
       const select = document.getElementById('filtro-morador');
+      const valAtual = select.value;
       select.innerHTML = `<option value="todos">Todos os Responsáveis</option>`;
       moradores.forEach(m => {
         select.innerHTML += `<option value="${m.nome}">${m.nome}</option>`;
       });
+      select.value = valAtual || "todos";
     }
 
     // Normaliza datas em formato BR ou timestamp
@@ -239,7 +263,6 @@
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Pendências");
 
-      // Baixar arquivo com data atual no nome
       const dataHoje = new Date().toISOString().split('T')[0];
       XLSX.writeFile(workbook, `relatorio_pendencias_${dataHoje}.xlsx`);
     }
@@ -317,14 +340,16 @@
       });
     }
 
+    // Inicialização da Página com escuta em Tempo Real do Firebase
     window.onload = function() {
-      const savedTarefas = localStorage.getItem('residencia_tarefas');
-      if (savedTarefas) tarefas = JSON.parse(savedTarefas);
-      const savedMoradores = localStorage.getItem('residencia_moradores');
-      if (savedMoradores) moradores = JSON.parse(savedMoradores);
+      db.ref('residencia').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        if (data.tarefas) tarefas = data.tarefas;
+        if (data.moradores) moradores = data.moradores;
 
-      popularSelectMoradores();
-      renderPendencias();
+        popularSelectMoradores();
+        renderPendencias();
+      });
 
       setInterval(renderPendencias, 60000);
     };
