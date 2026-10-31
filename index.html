@@ -149,9 +149,27 @@
 
   </main>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <!-- Script da Aplicação -->
   <script>
-    // Estado Inicial / Carregamento via localStorage
+    // Inicialização do Firebase com as credenciais do seu projeto
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4BatmwCnsz5VV9HSu2bWcEXhNOt2r4U4",
+      authDomain: "residencial-7210a.firebaseapp.com",
+      databaseURL: "https://residencial-7210a-default-rtdb.firebaseio.com",
+      projectId: "residencial-7210a",
+      storageBucket: "residencial-7210a.firebasestorage.app",
+      messagingSenderId: "922614456522",
+      appId: "1:922614456522:web:468308256d3dc266425433"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Estado Inicial / Carregamento
     let moradores = JSON.parse(localStorage.getItem('residencia_moradores')) || [
       { id: 1, nome: "Gustavo", colaboracao: 2200, pontos: 0 },
       { id: 2, nome: "Maxine", colaboracao: 1500, pontos: 0 },
@@ -170,10 +188,28 @@
 
     let caixinhaReserva = parseFloat(localStorage.getItem('residencia_caixinha')) || 450.00;
 
+    // Recalcula os pontos dos moradores com base nas tarefas
+    function recalcularPontosMoradores(tarefas) {
+      const listaTarefas = tarefas || JSON.parse(localStorage.getItem('residencia_tarefas')) || [];
+      moradores.forEach(m => {
+        if (!m.nome) return;
+        const nomeNorm = m.nome.trim().toLowerCase();
+        const pontosCalculados = listaTarefas
+          .filter(t => t.concluida && t.responsavel && t.responsavel.trim().toLowerCase() === nomeNorm)
+          .reduce((sum, t) => sum + (Number(t.pontos) || 0), 0);
+        m.pontos = pontosCalculados;
+      });
+    }
+
     function salvarDados() {
       localStorage.setItem('residencia_moradores', JSON.stringify(moradores));
       localStorage.setItem('residencia_contas', JSON.stringify(contas));
       localStorage.setItem('residencia_caixinha', caixinhaReserva);
+
+      // Salva em tempo real no Firebase
+      db.ref('residencia/moradores').set(moradores);
+      db.ref('residencia/contas').set(contas);
+      db.ref('residencia/caixinha').set(caixinhaReserva);
     }
 
     function atualizarReservaManual(valor) {
@@ -190,13 +226,13 @@
         return;
       }
 
-      const totalArrecadado = moradores.reduce((acc, m) => acc + m.colaboracao, 0);
+      const totalArrecadado = moradores.reduce((acc, m) => acc + (Number(m.colaboracao) || 0), 0);
 
       let maiorDestaque = null;
       let maiorValor = -1;
 
       moradores.forEach(m => {
-        if (m.colaboracao > maiorValor) {
+        if ((m.colaboracao || 0) > maiorValor) {
           maiorValor = m.colaboracao;
           maiorDestaque = m;
         }
@@ -221,7 +257,7 @@
               </div>
               <h2 class="text-2xl font-black text-white mt-0.5">${maiorDestaque.nome}</h2>
               <p class="text-xs text-slate-300 mt-1">
-                Contribuição individual de <strong class="text-emerald-400">R$ ${maiorDestaque.colaboracao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> (${porc}% do total) + <strong class="text-amber-400">${maiorDestaque.pontos || 0} pts em tarefas</strong>
+                Contribuição individual de <strong class="text-emerald-400">R$ ${Number(maiorDestaque.colaboracao).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> (${porc}% do total) + <strong class="text-amber-400">${maiorDestaque.pontos || 0} pts em tarefas</strong>
               </p>
             </div>
           </div>
@@ -242,10 +278,10 @@
       const container = document.getElementById('lista-moradores');
       container.innerHTML = '';
 
-      const totalArrecadado = moradores.reduce((acc, m) => acc + m.colaboracao, 0);
+      const totalArrecadado = moradores.reduce((acc, m) => acc + (Number(m.colaboracao) || 0), 0);
 
       moradores.forEach(m => {
-        const porc = totalArrecadado > 0 ? ((m.colaboracao / totalArrecadado) * 100).toFixed(1) : 0;
+        const porc = totalArrecadado > 0 ? (((m.colaboracao || 0) / totalArrecadado) * 100).toFixed(1) : 0;
         const pontosMorador = m.pontos || 0;
 
         container.innerHTML += `
@@ -253,7 +289,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-base">
-                  ${m.nome.substring(0, 2).toUpperCase()}
+                  ${m.nome ? m.nome.substring(0, 2).toUpperCase() : 'MO'}
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
@@ -298,19 +334,19 @@
       const m = moradores.find(x => x.id === id);
       if (m) {
         m[campo] = valor;
-        calcularTudo();
+        salvarDados();
       }
     }
 
     function adicionarMorador() {
       const novoId = moradores.length ? Math.max(...moradores.map(m => m.id)) + 1 : 1;
       moradores.push({ id: novoId, nome: `Morador ${novoId}`, colaboracao: 1000, pontos: 0 });
-      calcularTudo();
+      salvarDados();
     }
 
     function removerMorador(id) {
       moradores = moradores.filter(m => m.id !== id);
-      calcularTudo();
+      salvarDados();
     }
 
     // Renderizar Despesas e Contas
@@ -347,25 +383,27 @@
       const c = contas.find(x => x.id === id);
       if (c) {
         c[campo] = valor;
-        calcularTudo();
+        salvarDados();
       }
     }
 
     function adicionarConta() {
       const novoId = contas.length ? Math.max(...contas.map(c => c.id)) + 1 : 1;
       contas.push({ id: novoId, nome: "Nova Despesa", valor: 150, categoria: "Geral" });
-      calcularTudo();
+      salvarDados();
     }
 
     function removerConta(id) {
       contas = contas.filter(c => c.id !== id);
-      calcularTudo();
+      salvarDados();
     }
 
     // Cálculo Global Financeiro
-    function calcularTudo() {
-      const totalColaborado = moradores.reduce((acc, m) => acc + m.colaboracao, 0);
-      const totalDespesas = contas.reduce((acc, c) => acc + c.valor, 0);
+    function calcularTudo(tarefasNuvem) {
+      recalcularPontosMoradores(tarefasNuvem);
+
+      const totalColaborado = moradores.reduce((acc, m) => acc + (Number(m.colaboracao) || 0), 0);
+      const totalDespesas = contas.reduce((acc, c) => acc + (Number(c.valor) || 0), 0);
       const saldo = totalColaborado - totalDespesas;
 
       document.getElementById('kpi-colaborado').innerText = `R$ ${totalColaborado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
@@ -391,23 +429,25 @@
       }
 
       const inputCaixinha = document.getElementById('input-caixinha-reserva');
-      if (document.activeElement !== inputCaixinha) {
+      if (inputCaixinha && document.activeElement !== inputCaixinha) {
         inputCaixinha.value = caixinhaReserva;
       }
 
       renderMoradores();
       renderContas();
       renderBannerDestaque();
-      salvarDados();
     }
 
-    // Inicialização da Página
+    // Inicialização da Página com escuta em Tempo Real no Firebase
     window.onload = function() {
-      const savedMoradores = localStorage.getItem('residencia_moradores');
-      if (savedMoradores) {
-        moradores = JSON.parse(savedMoradores);
-      }
-      calcularTudo();
+      db.ref('residencia').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        if (data.moradores) moradores = data.moradores;
+        if (data.contas) contas = data.contas;
+        if (data.caixinha !== undefined) caixinhaReserva = data.caixinha;
+
+        calcularTudo(data.tarefas || []);
+      });
     };
   </script>
 </body>
